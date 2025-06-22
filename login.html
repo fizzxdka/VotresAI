@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ChatGPT Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="translations.js"></script>
+</head>
+<body class="font-inter bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md">
+        <!-- Login Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-translate="Welcome to ChatGPT Clone">Welcome to ChatGPT Clone</h1>
+                <p class="text-gray-600 dark:text-gray-400" data-translate="Sign in to start your AI conversation">Sign in to start your AI conversation</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <!-- Guest Login -->
+                <div class="space-y-4">
+                    <button type="button" id="guestLoginBtn" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium">
+                        <i class="fas fa-user-secret"></i>
+                        <span data-translate="Continue as Guest">Continue as Guest</span>
+                    </button>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400" data-translate="Or continue with">Or continue with</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Username Input -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="Username (Optional)">
+                        Username (Optional)
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                            placeholder="Enter your username"
+                            data-translate="Enter your username"
+                        >
+                    </div>
+                </div>
+
+                <!-- Display Name Input -->
+                <div>
+                    <label for="displayName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="Display Name (Optional)">
+                        Display Name (Optional)
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-id-badge text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="displayName" 
+                            name="displayName"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                            placeholder="How should we call you?"
+                            data-translate="How should we call you?"
+                        >
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all font-medium">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-translate="Start Chatting">Start Chatting</span>
+                </button>
+            </form>
+
+            <!-- Features Preview -->
+            <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3" data-translate="What you can do:">What you can do:</h3>
+                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-comments text-blue-500"></i>
+                        <span data-translate="Chat with AI assistants">Chat with AI assistants</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-image text-purple-500"></i>
+                        <span data-translate="Upload and analyze images (OCR)">Upload and analyze images (OCR)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-search text-green-500"></i>
+                        <span data-translate="Search the web">Search the web</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-moon text-indigo-500"></i>
+                        <span data-translate="Dark/Light mode">Dark/Light mode</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language and Theme Toggle -->
+            <div class="mt-6 flex justify-center gap-4">
+                <!-- Language Selection -->
+                <select id="languageSelect" class="px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="id">🇮🇩 Bahasa Indonesia</option>
+                </select>
+                
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:inline"></i>
+                    <span class="dark:hidden" data-translate="Dark mode">Dark mode</span>
+                    <span class="hidden dark:inline" data-translate="Light mode">Light mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
+            <p data-translate="No registration required • Guest access available">No registration required • Guest access available</p>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // Guest login
+        document.getElementById('guestLoginBtn').addEventListener('click', function() {
+            loginAsGuest();
+        });
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const displayName = document.getElementById('displayName').value.trim();
+            
+            if (username || displayName) {
+                loginWithCredentials(username, displayName);
+            } else {
+                loginAsGuest();
+            }
+        });
+
+        function loginAsGuest() {
+            const guestUser = {
+                id: 'guest_' + Date.now(),
+                username: 'guest',
+                displayName: 'Guest User',
+                isGuest: true,
+                loginTime: Date.now()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(guestUser));
+            redirectToChat();
+        }
+
+        function loginWithCredentials(username, displayName) {
+            const user = {
+                id: 'user_' + Date.now(),
+                username: username || 'user',
+                displayName: displayName || username || 'User',
+                isGuest: false,
+                loginTime: Date.now()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            redirectToChat();
+        }
+
+        function redirectToChat() {
+            // Add loading animation
+            document.body.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-robot text-white text-2xl"></i>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                            </div>
+                            <span>Preparing your chat...</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        // Check if user is already logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const user = JSON.parse(currentUser);
+            // Check if login is still valid (24 hours)
+            if (Date.now() - user.loginTime < 24 * 60 * 60 * 1000) {
+                window.location.href = 'index.html';
+            } else {
+                localStorage.removeItem('currentUser');
+            }
+        }
+    </script>
+</body>
+</html>

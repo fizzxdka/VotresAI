@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votres - AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="translations.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-30">
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <h1 class="text-lg font-semibold" data-translate="ChatGPT Clone">Votres AI</h1>
+                <button id="closeSidebar" class="lg:hidden p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- New Chat Button -->
+        <div class="p-4">
+            <button id="newChatBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-plus"></i>
+                <span data-translate="New Chat">New Chat</span>
+            </button>
+        </div>
+
+        <!-- Chat History -->
+        <div class="flex-1 overflow-y-auto px-4">
+            <div class="space-y-2" id="chatHistory">
+                <!-- Chat history items will be added here -->
+            </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+            <!-- Theme Toggle -->
+            <button id="themeToggle" class="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <i class="fas fa-moon dark:hidden"></i>
+                <i class="fas fa-sun hidden dark:inline"></i>
+                <span class="dark:hidden" data-translate="Dark mode">Dark mode</span>
+                <span class="hidden dark:inline" data-translate="Light mode">Light mode</span>
+            </button>
+            
+            <!-- Language Selection -->
+            <div class="mt-2">
+                <select id="languageSelect" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="id">🇮🇩 Bahasa Indonesia</option>
+                </select>
+            </div>
+            
+            <!-- Model Selection -->
+            <div class="mt-2">
+                <select id="modelSelect" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="claude-3-opus">Claude-3 Opus</option>
+                    <option value="claude-3-sonnet">Claude-3 Sonnet</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden hidden"></div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64 flex flex-col h-screen">
+        <!-- Header -->
+        <header class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <div class="flex items-center gap-3">
+                <button id="openSidebar" class="lg:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 id="chatTitle" class="text-lg font-medium" data-translate="New Chat">New Chat</h2>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500 dark:text-gray-400" id="modelDisplay">GPT-4 Turbo</span>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <div class="flex-1 overflow-y-auto" id="chatContainer">
+            <div class="max-w-4xl mx-auto px-4 py-8" id="messagesContainer">
+                <!-- Welcome Message -->
+                <div class="text-center py-12" id="welcomeMessage">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">How can I help you today?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Start a conversation with AI assistant</p>
+                </div>
+                
+                <!-- Messages will be added here -->
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Attachment Preview -->
+                <div id="attachmentPreview" class="hidden mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div id="previewContent" class="flex items-center gap-2">
+                                <!-- Preview content will be inserted here -->
+                            </div>
+                        </div>
+                        <button id="removeAttachment" class="p-1 text-gray-500 hover:text-red-500 transition-colors">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <!-- Input Controls -->
+                    <div class="flex items-end gap-2">
+                        <!-- Attachment Button -->
+                        <div class="relative">
+                            <button id="attachButton" class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <div id="attachMenu" class="hidden absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-2 min-w-48">
+                                <button id="uploadImageBtn" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                    <i class="fas fa-image text-purple-500"></i>
+                                    <span>Upload Image (OCR)</span>
+                                </button>
+                                <button id="searchWebBtn" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                    <i class="fas fa-search text-green-500"></i>
+                                    <span>Search Web</span>
+                                </button>
+                                <button id="voiceInputBtn" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                    <i class="fas fa-microphone text-red-500"></i>
+                                    <span>Voice Input</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Message Input -->
+                        <div class="flex-1 relative">
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="Message ChatGPT..." 
+                                class="w-full px-4 py-3 pr-12 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                rows="1"
+                                style="max-height: 200px;"
+                            ></textarea>
+                            <button 
+                                id="sendButton" 
+                                class="absolute right-2 bottom-2 p-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
+                                disabled
+                            >
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                    ChatGPT can make mistakes. Consider checking important information.
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden File Input -->
+        <input type="file" id="fileInput" accept="image/*" class="hidden">
+
+        <!-- Search Modal -->
+        <div id="searchModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Search Web</h3>
+                    <button id="closeSearchModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <input 
+                        type="text" 
+                        id="searchQuery" 
+                        placeholder="What would you like to search for?"
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    >
+                    <div class="flex gap-2">
+                        <button id="executeSearch" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                        <button id="cancelSearch" class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden">
+        <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+            <div class="flex space-x-1">
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            </div>
+            <span class="text-sm">AI is thinking...</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
